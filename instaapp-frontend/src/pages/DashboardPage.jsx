@@ -54,12 +54,33 @@ const DashboardPage = () => {
       if (response.data.posts.length === 0) {
         hasMore.current = false;
       } else {
-        const postsWithComments = response.data.posts.map((post) => ({
-          ...post,
-          comments: post.comments || [],
-        }));
+        const postsWithStructuredComments = response.data.posts.map((post) => {
+          const mainComments = [];
+          const repliesMap = {};
 
-        setPosts((prev) => [...prev, ...postsWithComments]);
+          post.comments.forEach((comment) => {
+            if (comment.parent_id === null) {
+              mainComments.push({ ...comment, replies: [] });
+            } else {
+              if (!repliesMap[comment.parent_id]) {
+                repliesMap[comment.parent_id] = [];
+              }
+              repliesMap[comment.parent_id].push(comment);
+            }
+          });
+          mainComments.forEach((comment) => {
+            if (repliesMap[comment.id]) {
+              comment.replies = repliesMap[comment.id];
+            }
+          });
+
+          return {
+            ...post,
+            comments: mainComments,
+          };
+        });
+
+        setPosts((prev) => [...prev, ...postsWithStructuredComments]);
         setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
@@ -134,7 +155,7 @@ const DashboardPage = () => {
     }
   };
 
-  const submitReply = async (commentId, postId) => {
+  const submitReply = async (postId, commentId) => {
     if (!replyText.trim()) return;
 
     try {
@@ -165,6 +186,9 @@ const DashboardPage = () => {
   };
 
   const deleteComment = async (postId, commentId) => {
+    console.log(postId);
+    console.log(commentId);
+
     try {
       await API.delete(`/comments/${postId}/comment/${commentId}`, {
         headers: { Authorization: `Bearer ${sessionStorage.getItem("authToken")}` },
@@ -184,8 +208,33 @@ const DashboardPage = () => {
 
   //  Logout
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
-    navigate("/");
+    Swal.fire({
+      title: "Keluar?",
+      text: "Apakah Anda yakin ingin keluar?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Keluar!",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.removeItem("authToken");
+
+        Swal.fire({
+          title: "Logout Berhasil!",
+          text: "Anda telah keluar.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
+    });
   };
 
   const handleAddPost = async (caption, file) => {
