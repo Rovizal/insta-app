@@ -15,30 +15,32 @@ MySQL 5.7+ atau MariaDB 10+
 Laravel 8+ (gunakan composer install)
 
 # BACKEND
-# Clone repository
+
+-Clone repository
 git clone https://github.com/Rovizal/insta-app.git
 cd insta-app/instaapp-backend
 
-# Install dependencies
+-Install dependencies
 composer install
 
-# Copy .env dan konfigurasi database
+-Copy .env dan konfigurasi database
 cp .env.example .env
 
-# Jalankan server Laravel
+-Jalankan server Laravel
 php artisan serve
 
 # FRONTEND
-# Masuk ke direktori frontend
+
+-Masuk ke direktori frontend
 cd ../instaapp-frontend
 
-# Install dependencies
+-Install dependencies
 npm install
 
-# Jalankan Vite
+-Jalankan Vite
 npm run dev
 
-Autentikasi
-Register: Buat akun baru
-Login: Masukkan email & password yang valid
-Session: Token disimpan di sessionStorage
+# Autentikasi
+
+-Register: Buat akun baru
+-Login: Masukkan email & password yang valid
