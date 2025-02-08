@@ -1,4 +1,4 @@
-#InstaApp
+# InstaApp
 
 InstaApp adalah aplikasi berbasis React (Vite) + Laravel yang memungkinkan pengguna untuk membuat, mengedit, dan berinteraksi dengan postingan.
 
@@ -14,7 +14,7 @@ Composer 2+
 MySQL 5.7+ atau MariaDB 10+
 Laravel 8+ (gunakan composer install)
 
-#BACKEND
+# BACKEND
 # Clone repository
 git clone https://github.com/Rovizal/insta-app.git
 cd insta-app/instaapp-backend
@@ -28,7 +28,7 @@ cp .env.example .env
 # Jalankan server Laravel
 php artisan serve
 
-#FRONTEND
+# FRONTEND
 # Masuk ke direktori frontend
 cd ../instaapp-frontend
 
